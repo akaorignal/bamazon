@@ -14,6 +14,8 @@ var connection = mysql.createConnection({
   password: "shad",
   database: "bamazon_db"
 });
+
+
 connection.connect(function(err) {
   if (err) throw err;
   console.log("connected as id " + connection.threadId); // verifies connection
@@ -23,18 +25,17 @@ connection.connect(function(err) {
 
   //prompt user to choose productID and how many they want
 
-
-
-  
-})
+  chooseProduct();
 
 
 
-// });
-
+   connection.end();
+});
 
 //    * conjunctionFUNCTIONs */
    // Input - {type: 'input'}
+// Take type, name, message[, default, filter, validate] properties. //
+
 
 //looks at products table and lists all data
 function queryProducts() {
@@ -49,7 +50,7 @@ function queryProducts() {
 
 function chooseProduct(){
 
-  inquirer.prompt([/* Pass your questions in here */
+    inquirer.prompt([/* Pass your questions in here */
      {
       name: "product",
       message: "Which Item Id?"
@@ -57,38 +58,39 @@ function chooseProduct(){
     }, { 
       name: "qauntity",
       message: "How Many Would You Like?"
-    }
-     
+    }]).then(function (answer)
 
-    ]).then(function (answers) {
-    var productWanted = answers.product -1
-    var chosenProduct = res[productWanted]
-    var quan = answers.quantity
-    if (quan < res[productWanted].stock_q){
+     {
+      var item = answer.id;
+      var quan = answer.quantity;
 
-                console.log("Your total for " + "(" + answers.quantity + ")" + " - " + res[product].products + quan);
-                connection.query("UPDATE products SET ? WHERE ?", [{
-                    StockQuantity: res[productWanted].stock_q - quan
-                }, {
-                    id: res[productWanted].id
-                }], function(err, res) {
-                    //console.log(err);
-                    
-                });
-    }
- connection.end();
-      product(); 
-});
 
+        var query = "SELECT id, productName, departmentName, price, stock_q FROM product WHERE ?";
+        connection.query(query, + id, function (err, res) {
+          
+          if (err) throw err;
+          if res[0].stock_q = quan >= 0 {
+            console.log("jfjfjf");
+          }
+        };
 }
+)};
+
+       // connection.connect('SELECT * FROM product', function(err, res){
+              
+        //       console.log(res[0]); // i need to print if there is quantity or not
+            
+                              
+        //         }
+    
 
 // Once the customer has placed the order, your application should check if your store has enough of the product to meet the customer's request.
 
-function product (){
-  this.name ="product";
-  this.qauntity ="qauntity";
+// function product (){
+//   this.name ="product";
+//   this.qauntity ="qauntity";
 
-  this.printInfo = function() {
-    console.log("Name: " + this.name + "\nPosition: " + this.qauntity);
-  };
-}
+//   this.printInfo = function() {
+//     console.log("Name: " + this.name + "\nPosition: " + this.qauntity);
+//   };
+// }
